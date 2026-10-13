@@ -22,27 +22,21 @@ Route::get('/info', fn () => [
 Route::get('/anggota/{nama}', function (string $nama) {
     return "Anggota perpustakaan: {$nama}";
 });
-
 Route::get('/rak/{genre?}', function (?string $genre = 'umum') {
     return "Menampilkan rak buku genre: {$genre}";
 });
-
 Route::get('/buku/{kategori}/tahun/{tahun}', function (string $kategori, int $tahun) {
     return "Buku kategori {$kategori} terbitan tahun {$tahun}";
 });
-
 Route::get('/peminjaman/{id}', function (int $id) {
     return "Detail peminjaman nomor {$id}";
 })->whereNumber('id');
-
 Route::get('/penulis/{nama}', function (string $nama) {
     return "Penulis: {$nama}";
 })->whereAlpha('nama');
-
 Route::get('/isbn/{isbn}', function (string $isbn) {
     return "ISBN: {$isbn}";
 })->where('isbn', '[0-9]{13}');
-
 Route::get('/status/{status}', function (string $status) {
     return "Status peminjaman: {$status}";
 })->whereIn('status', ['dipinjam', 'dikembalikan', 'terlambat']);
@@ -67,3 +61,11 @@ Route::permanentRedirect('/katalog-lama', '/info');
 Route::fallback(function () {
     return response('Maaf, halaman yang Anda cari tidak tersedia.', 404);
 });
+
+use App\Http\Controllers\MahasiswaController;
+
+Route::get('/profil', [MahasiswaController::class, 'profil'])->name('mahasiswa.profil');
+
+Route::get('/mahasiswa', [MahasiswaController::class, 'daftar'])->name('mahasiswa.daftar');
+
+Route::get('/mahasiswa/{nim}', [MahasiswaController::class, 'show'])->name('mahasiswa.detail');
